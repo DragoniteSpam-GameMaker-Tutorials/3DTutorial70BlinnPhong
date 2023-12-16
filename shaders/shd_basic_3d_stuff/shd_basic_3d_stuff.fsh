@@ -14,12 +14,15 @@ void main() {
     vec3 light_color = vec3(0.8, 0.8, 0.8);
     vec3 light_dir = normalize(v_worldPosition - u_LightPosition);
     
-    float specular_strength = 1.0;
+    float specular_strength = 0.5;
     float specular_shininess = 32.0;
     vec3 view_dir = normalize(u_ViewPosition - v_worldPosition);
-    vec3 reflect_dir = reflect(light_dir, v_worldNormal);
+    //vec3 reflect_dir = reflect(light_dir, v_worldNormal);
+    //vec3 half_dir = normalize(-light_dir + view_dir);
+    vec3 half_dir = normalize(view_dir - light_dir);
     
-    float specular_intensity = pow(max(dot(view_dir, reflect_dir), 0.0), specular_shininess);
+    //float specular_intensity = pow(max(dot(view_dir, reflect_dir), 0.0), specular_shininess);
+    float specular_intensity = pow(max(dot(v_worldNormal, half_dir), 0.0), specular_shininess);
     vec3 specular_color = specular_strength * specular_intensity * light_color;
     
     float att = distance(u_LightPosition, v_worldPosition) / u_LightRadius;
